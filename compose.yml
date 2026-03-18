@@ -1,0 +1,27 @@
+services:
+  jekyll:
+    build: .
+    ports:
+      # going to be reverse proxied
+      - "127.0.0.1:4000:4000"
+    volumes:
+      # Source code read-only
+      - ./aboutme.md:/app/aboutme.md:ro,Z
+      - ./index.html:/app/index.html:ro,Z
+      - ./feed.xml:/app/feed.xml:ro,Z
+      - ./tags.html:/app/tags.html:ro,Z
+      - ./404.html:/app/404.html:ro,Z
+      - ./favicon.ico:/app/favicon.ico:ro,Z
+      - ./_layouts:/app/_layouts:ro,Z
+      - ./_includes:/app/_includes:ro,Z
+      - ./_posts:/app/_posts:ro,Z
+      - ./_data:/app/_data:ro,Z
+      - ./_config.yml:/app/_config.yml:ro,Z
+      - ./assets:/app/assets:ro,Z
+      # Write-allowed directories (required for Jekyll)
+      - ./_site:/app/_site:Z
+      - ./.jekyll-cache:/app/.jekyll-cache:Z
+    environment:
+      - JEKYLL_ENV=production
+    cap_drop: [all]
+    restart: always
